@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace SnakeSimulator
 {
-    public partial class Form1 : Form
+    public partial class frmSankeSimulator : Form
     {
-        public Form1()
+        public frmSankeSimulator()
         {
             InitializeComponent();
         }

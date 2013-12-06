@@ -1,6 +1,6 @@
 ﻿namespace SnakeSimulator
 {
-    partial class Form1
+    partial class frmSankeSimulator
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // frmSankeSimulator
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(397, 261);
+            this.Name = "frmSankeSimulator";
+            this.Text = "SnakeSimulator";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
