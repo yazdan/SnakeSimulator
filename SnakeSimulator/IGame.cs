@@ -12,5 +12,6 @@ namespace SnakeSimulator
         string processInput(string inStr);
 
         string getFirstOutput();
+        string getSecondOutput();
     }
 }

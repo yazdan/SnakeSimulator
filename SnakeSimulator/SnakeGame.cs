@@ -26,11 +26,24 @@ namespace SnakeSimulator
 
 
         int _currentFoodIndex;
-        ArrayList foods;
+        List<Point> foods;
 
         List<Point> snake;
 
+        List<Point> moves;
 
+        public SnakeGame()
+        {
+            moves = new List<Point>();
+            moves.Add(new Point( 0, 1));
+            moves.Add(new Point(-1, 0));
+            moves.Add(new Point( 0,-1));
+            moves.Add(new Point( 1, 0));
+            snake = new List<Point>();
+            snake.Add(new Point(2, 0));
+            snake.Add(new Point(1, 0));
+            snake.Add(new Point(0, 0));
+        }
         public bool isGameEnded()
         {
             if (_currentFoodIndex >= foods.Count)
@@ -49,16 +62,27 @@ namespace SnakeSimulator
             switch (inStr.ToLower())
             {
                 case "r":
+                    MoveSnke(SnakeMoves.Right);
                     break;
                 case "l":
+                    MoveSnke(SnakeMoves.Left);
                     break;
                 case "s":
+                    MoveSnke(SnakeMoves.Straight);
                     break;
                 default:
                     outPutStr = INVALID_INPUT;
                     break;
             }
 
+            if (checkForCollision())
+            {
+                outPutStr = INVALID_INPUT;
+            }
+            else
+            {
+                outPutStr = getFoodStr();
+            }
             return outPutStr;
         }
 
@@ -67,6 +91,15 @@ namespace SnakeSimulator
             return BoardSize.X.ToString() + " " + BoardSize.Y.ToString();
         }
 
+        public string getSecondOutput()
+        {
+            return getFoodStr();
+        }
+
+        string getFoodStr()
+        {
+            return  string.Format("0 {0} {1}", foods[_currentFoodIndex].X, foods[_currentFoodIndex].Y);
+        }
 
         bool checkForCollision()
         {
@@ -87,9 +120,56 @@ namespace SnakeSimulator
         void MoveSnke(SnakeMoves mv)
         {
             Point MoveDir = new Point(snake[0].X - snake[1].X, snake[0].Y - snake[1].Y);
-                
-            
 
+            int moveIndex = moves.IndexOf(MoveDir);
+
+            switch (mv)
+            {
+                case SnakeMoves.Left:
+                    MoveDir = moves[(moveIndex - 1 + moves.Count) % moves.Count];
+                    break;
+                case SnakeMoves.Right:
+                    MoveDir = moves[(moveIndex + 1) % moves.Count];
+                    break;
+                case SnakeMoves.Straight:
+                    break;
+            }
+
+            Point nextHead = new Point(snake[0].X + MoveDir.X, snake[0].Y + MoveDir.Y);
+
+            if (nextHead.X < 0)
+                nextHead.X += BoardSize.X;
+
+            if (nextHead.Y < 0)
+                nextHead.Y += BoardSize.Y;
+
+            if (nextHead != foods[_currentFoodIndex])
+            {
+                snake.RemoveAt(snake.Count - 1);
+            }
+            else
+            {
+                _currentFoodIndex++;
+            }
+
+            snake.Insert(0,nextHead);
+            
+        }
+
+        public void makeRandomGame(int xMax, int yMax)
+        {
+            Random rnd = new Random();
+
+            BoardSize = new Point(rnd.Next(3, xMax), rnd.Next(3, yMax));
+
+            int foodCount = rnd.Next(1,BoardSize.X * BoardSize.Y);
+
+            foods = new List<Point>(foodCount);
+
+            for (int i = 0; i < foodCount; i++)
+            {
+                foods.Add(new Point(rnd.Next(BoardSize.X), rnd.Next(BoardSize.Y)));
+            }
         }
     }
 }
